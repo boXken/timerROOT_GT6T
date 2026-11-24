@@ -1,4 +1,4 @@
-# GT6T Timer PoC — CVE-2026-98260
+# Realme GT6T Timer PoC — CVE-2026-98260
 
 A research port of the **CVE-2026-98260** POSIX CPU timer use-after-free
 (same bug class as CVE-2026-64560) for the **Realme GT6T**.
@@ -37,8 +37,8 @@ builds. The binary auto-selects the correct profile from `uname -r`.
 
 | Profile | Kernel release | Page size | Status |
 |---|---|---|---|
-| `gt6t-1200` | `6.1.141-android14-11-o-gf61012bbfa24` | 4K | vulnerable |
-| `gt6t-1310` | `6.1.157-android14-11-o-g00d81d97d759` | 4K | vulnerable at time of writing |
+| `gt6t .1200` | `6.1.141-android14-11-o-gf61012bbfa24` | 4K | vulnerable |
+| `gt6t .1310` | `6.1.157-android14-11-o-g00d81d97d759` | 4K | vulnerable at time of writing |
 
 Both profiles were verified by disassembly against the corresponding
 `vmlinux-to-elf` recovery of the shipped `boot.img` kernel.
@@ -129,9 +129,6 @@ The exploit also writes its log to `/data/local/tmp/timer_last.log`.
 | `fake` | Fake-cred endgame: overwrite `task->cred`, set SELinux permissive, run the KernelSU late-load script. Parks forever; reboot to clean. |
 | *(no argument)* | Zero-write cred endgame; the child runs `id`, prints its SELinux context, and exits. |
 
-`prepare` is **not** a binary mode. It is the app-side action that deploys the
-binary and runs `target`. Typing `./gt6t_1310 prepare` falls through to the
-default exploit path.
 
 ---
 
@@ -158,27 +155,6 @@ target=gt6t-1200
 timer_site=0xffffffc00843a428
 ```
 
-### `fake` — key milestones
-
-```
-[+] child=... cred=0x... target=0x...
-[ksu] panic_on_warn=...
-[+] fake cred A=0x... selinux_state=0x...
-[+] cred writes landed, waking child
-[child] woke uid=0 euid=0 mode=fake
-[fake] worker setuid(0)=0 errno=0 resuid=0/0/0
-[ksu] start uid=0 selinux=Permissive
-[ksu] late-load ...
-[ksu] late-load rc=0
-KSU_LOADED
-[+] child report uid=0 euid=0 setuid(0)=0 errno=0 resuid=0/0/0
-[!] fake cred page held; reboot to clean -- parking without reap (zombie held)
-```
-
-`KSU_MISSING` means no KernelSU/KSUNext/SukiSU manager or `libksud.so` was
-found. `KSU_STALE` means the manager and kernel uapi versions do not match.
-
----
 
 ## How it works (high level)
 
@@ -215,6 +191,10 @@ The write primitive is data-only; it does not call a function pointer, so
   unsaved data.
 - Use only on hardware you own or are explicitly authorized to modify.
 
+
+## Common Errors
+- **Base calibration failed** = restart the device and retry dont do fake again and again as that causes kernel panic
+
 ---
 
 ## Responsible disclosure
@@ -241,13 +221,12 @@ This port would not exist without the following work:
   98260 ports. This is the upstream PoC this port derives from.
 - **[kpgc10kai](https://github.com/kpgc10kai)** — Android porting work and the
   TimerRoot project. The Android-side structure, Shizuku execution model, and
-  the timer LPE port this repository is based on come from his work.
+  the timer LPE port this repository is based on come from his work. (repo removed/private now, his work was one of the most initial ones here though)
 - **TimerRoot / aurora port** — the timer LPE port and the KernelSU late-load
   chain.
 - **[Rikka](https://github.com/RikkaApps/Shizuku)** — Shizuku and Shizuku-API
   (Apache-2.0), which provide the shell-uid execution environment.
 - **KernelSU / KernelSU-Next** — the late-load root module path (GPL-2.0).
-- The GT6T testers and the wider 98260 port community.
 
 If any credit is missing or misattributed, please open an issue and it will be
 corrected.
@@ -291,9 +270,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-> If you prefer a different name or handle, replace `BROxKEN` above. If the
-> upstream `LICENSE` file uses a different copyright line, copy that line
-> verbatim instead of the one above.
 
 ---
 
