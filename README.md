@@ -270,7 +270,7 @@ MIT License
 
 Copyright (c) 2026 YuKongA
 Copyright (c) 2026 kpgc10kai
-Copyright (c) 2026 <your name>
+Copyright (c) 2026 BROxKEN
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -291,9 +291,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-> Replace `<your name>` with your name or handle. If the upstream `LICENSE`
-> file uses a different copyright line, copy that line verbatim instead of the
-> one above.
+> If you prefer a different name or handle, replace `BROxKEN` above. If the
+> upstream `LICENSE` file uses a different copyright line, copy that line
+> verbatim instead of the one above.
 
 ---
 

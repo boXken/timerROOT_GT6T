@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2026 YuKongA
  * Copyright (c) 2026 kpgc10kai
- * Copyright (c) 2026 <your name>
+ * Copyright (c) 2026 BROxKEN
  *
  * MIT License. See LICENSE / README.md.
  *
